@@ -17,7 +17,17 @@ class HomePage extends StatelessWidget {
               color: Colors.black,
               size: 30,
             ),
-            CircleAvatar(),
+            Text(
+              "ToDo App",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            CircleAvatar(
+              backgroundImage: AssetImage("assets/profile.png"),
+            ),
           ],
         ),
       ),
