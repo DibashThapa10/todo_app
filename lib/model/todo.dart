@@ -1,6 +1,6 @@
 class ToDO {
-  String? id;
-  String? todotext;
+ final String id;
+ final String todotext;
   bool isdone;
 
   ToDO({

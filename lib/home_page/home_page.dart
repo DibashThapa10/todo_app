@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> {
       results = todosList;
     } else {
       results = todosList
-          .where((item) => item.todotext!
+          .where((item) => item.todotext
               .toLowerCase()
               .contains(enteredKeyword.toLowerCase()))
           .toList();
