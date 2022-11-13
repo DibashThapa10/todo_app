@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/model/todo.dart';
 import 'package:todo_app/widget/todo_list.dart';
 
-import '../widget/new_widget.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -13,7 +11,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final todosList = ToDO.todoList();
+  List<ToDO> _foundToDo = [];
   final _todoController = TextEditingController();
+
+  @override
+  void initState() {
+    _foundToDo = todosList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +54,29 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Column(
               children: [
-                const SearchBox(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black12)),
+                  child: TextField(
+                    onChanged: (value) => _runFilter(value),
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(0),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      prefixIconConstraints:
+                          BoxConstraints(maxHeight: 20, minWidth: 25),
+                      border: InputBorder.none,
+                      hintText: "Search...",
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: ListView(
                     children: [
@@ -61,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                               fontSize: 30, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      for (ToDO todos in todosList)
+                      for (ToDO todos in _foundToDo.reversed)
                         ToDoItem(
                           todo: todos,
                           onToDoChanged: _handleToDoChange,
@@ -146,5 +173,21 @@ class _HomePageState extends State<HomePage> {
           todotext: todo));
     });
     _todoController.clear();
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<ToDO> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = todosList;
+    } else {
+      results = todosList
+          .where((item) => item.todotext!
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      _foundToDo = results;
+    });
   }
 }
