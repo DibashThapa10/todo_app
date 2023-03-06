@@ -3,7 +3,7 @@ import 'package:todo_app/model/todo.dart';
 
 class ToDoItem extends StatelessWidget {
   final ToDO todo;
-  final onToDoChanged;
+  final  onToDoChanged;
   final onDeleteItem;
   const ToDoItem(
       {Key? key,
