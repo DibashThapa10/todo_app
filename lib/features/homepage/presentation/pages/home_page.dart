@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/features/homepage/data/models/todo.dart';
 import 'package:todo_app/features/homepage/presentation/pages/todo_view.dart';
 
+import '../widgets/menu_drawer.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -52,26 +54,16 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(58, 66, 86, 1.0),
         elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Icon(
-              Icons.menu,
-              size: 30,
-            ),
-            Text(
-              "Welcome Binay",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-            CircleAvatar(
-              backgroundImage: AssetImage("assets/birthday.jpg"),
-            ),
-          ],
+        centerTitle: true,
+        title: const Text(
+          "Todo App",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
       ),
+      drawer: MenuDrawer(appcolor: appcolor),
       body: ListView.builder(
           scrollDirection: Axis.vertical,
           itemCount: todos.length,
@@ -147,7 +139,7 @@ class _HomePageState extends State<HomePage> {
             ),
             todo.status ?? false
                 ? const Icon(
-                    Icons.verified,
+                    Icons.done,
                     color: Colors.greenAccent,
                   )
                 : Container()
@@ -194,6 +186,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ));
   }
+}
 
   // return Scaffold(
   //   appBar: AppBar(
@@ -363,4 +356,7 @@ class _HomePageState extends State<HomePage> {
   //     _foundToDo = results;
   //   });
   // }
-}
+
+
+
+
