@@ -1,15 +1,50 @@
-class ToDO {
-  String? id;
-  String? todotext;
-  bool isdone;
+class Todo {
+  int? id;
+  String? title;
+  String? description;
+  bool? status;
 
-  ToDO({
-    required this.id,
-    required this.todotext,
-    this.isdone = false,
-  });
+  Todo({this.id, this.title, this.description, this.status}) {
+    id = id;
+    title = title;
+    description = description;
+    status = status;
+  }
 
-  static List<ToDO> todoList() {
-    return [];
+  toJson() {
+    return {
+      "id": id,
+      "description": description,
+      "title": title,
+      "status": status
+    };
+  }
+
+  fromJson(jsonData) {
+    return Todo(
+        id: jsonData['id'],
+        title: jsonData['title'],
+        description: jsonData['description'],
+        status: jsonData['status']);
   }
 }
+
+
+
+
+
+// class ToDO {
+//   String? id;
+//   String? todotext;
+//   bool isdone;
+
+//   ToDO({
+//     required this.id,
+//     required this.todotext,
+//     this.isdone = false,
+//   });
+
+//   static List<ToDO> todoList() {
+//     return [];
+//   }
+// }
