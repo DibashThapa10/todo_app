@@ -1,15 +1,62 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'list_drawer.dart';
 
-class MenuDrawer extends StatelessWidget {
+class MenuDrawer extends StatefulWidget {
   const MenuDrawer({
     super.key,
     required this.appcolor,
   });
 
   final Color appcolor;
+
+  @override
+  State<MenuDrawer> createState() => _MenuDrawerState();
+}
+
+class _MenuDrawerState extends State<MenuDrawer> {
+  late SharedPreferences prefs;
+  File? image;
+  String? _imagepath;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.image = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      log('Failed to pick image: $e');
+    }
+  }
+
+  void saveImage(path) async {
+    SharedPreferences saveimage = await SharedPreferences.getInstance();
+    saveimage.setString("imagepath", path);
+  }
+
+  void loadImage() async {
+    SharedPreferences loadimage = await SharedPreferences.getInstance();
+    setState(() {
+      _imagepath = loadimage.getString("imagepath");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadImage();
+  }
+
   void exitApp() {
     SystemNavigator.pop();
   }
@@ -21,18 +68,96 @@ class MenuDrawer extends StatelessWidget {
         SizedBox(
           height: 100,
           child: DrawerHeader(
-            decoration: BoxDecoration(color: appcolor),
+            decoration: BoxDecoration(color: widget.appcolor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Welcome Binaya!',
+              children: [
+                const Text(
+                  'Welcome Boss!',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
-                CircleAvatar(
-                  radius: 25,
-                  backgroundImage: AssetImage("assets/birthday.jpg"),
-                ),
+                FloatingActionButton.large(
+                    elevation: 0,
+                    backgroundColor: Colors.greenAccent,
+                    shape: const CircleBorder(),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            child: AlertDialog(
+                              title: const Center(child: Text("Select")),
+                              content: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 110,
+                                    child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.teal)),
+                                        onPressed: () {
+                                          pickImage(ImageSource.gallery);
+                                        },
+                                        child: Row(
+                                          children: const [
+                                            Icon(Icons.image_outlined),
+                                            SizedBox(
+                                              width: 1,
+                                            ),
+                                            Text("Gallery"),
+                                          ],
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.teal,
+                                      ),
+                                      onPressed: () {
+                                        pickImage(ImageSource.camera);
+                                      },
+                                      child: Row(
+                                        children: const [
+                                          Icon(Icons.camera_alt_outlined),
+                                          SizedBox(
+                                            width: 1,
+                                          ),
+                                          Text("Camera"),
+                                        ],
+                                      )),
+                                ],
+                              ),
+                              actions: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      saveImage(image!.path);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Ok")),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: _imagepath != null
+                        ? CircleAvatar(
+                            radius: 45,
+                            backgroundImage: FileImage(File(_imagepath!)),
+                          )
+                        : CircleAvatar(
+                            radius: 45,
+                            backgroundImage:
+                                image != null ? FileImage(image!) : null,
+                          )),
+
+                // CircleAvatar(
+                //   radius: 25,
+                //   backgroundImage: AssetImage("assets/birthday.jpg"),
+                // ),
               ],
             ),
           ),
