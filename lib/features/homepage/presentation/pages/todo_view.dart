@@ -88,7 +88,6 @@ class _TodoViewState extends State<TodoView> {
                   ),
                   controller: descriptionController,
                 ))),
-              
               ],
             ),
           ),

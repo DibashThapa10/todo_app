@@ -129,10 +129,12 @@ class _HomePageState extends State<HomePage> {
         ),
         title: Row(
           children: [
-            Text(
-              todo.title.toString(),
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+            Expanded(
+              child: Text(
+                todo.title.toString(),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(
               width: 10,
