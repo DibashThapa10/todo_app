@@ -153,11 +153,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             backgroundImage:
                                 image != null ? FileImage(image!) : null,
                           )),
-
-                // CircleAvatar(
-                //   radius: 25,
-                //   backgroundImage: AssetImage("assets/birthday.jpg"),
-                // ),
               ],
             ),
           ),
